@@ -1,0 +1,8 @@
+*.gml
+*.gfs
+*.csv
+*.sql
+
+.vim
+.vscode
+.idea
