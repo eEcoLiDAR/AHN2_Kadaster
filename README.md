@@ -143,14 +143,14 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=template_postgis
 ogr2ogr -f "PostgreSQL" PG:"host=145.100.58.83 user=postgres dbname=bboxes password=mysecretpassword"  bounding_boxes_geom.csv -nln ec_geometries
 ```
 
-#### to show column details:
+
+## Working with a Database
+
+### to show column details:
 \d+ public.ec_geometries;
 
-#### show first 10 rows:
+### show first 10 rows:
 SELECT * FROM public.ec_geometries LIMIT 10;
-
-
-## Database Queries
 
 
 ## Data
