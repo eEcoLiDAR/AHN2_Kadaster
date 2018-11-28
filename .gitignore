@@ -1,6 +1,5 @@
 *.gml
 *.gfs
-*.csv
 *.sql
 
 .vim
