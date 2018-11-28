@@ -137,10 +137,17 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=template_postgis
 
 ## Bounding boxes
 
-### importing to PostGIS database
+### Importing to PostGIS database
+Bounding box information is stored in **bboxes** table of the database. To import bounding box file for Tile02O:
 
 ```
-ogr2ogr -f "PostgreSQL" PG:"host=145.100.58.83 user=postgres dbname=bboxes password=mysecretpassword"  bounding_boxes_geom.csv -nln ec_geometries
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=Tile02O password=mysecretpassword"  Tile02O_bounding_boxes_geom.csv -nln bboxes
+```
+```
+psql -h localhost -U postgres --dbname='Tile02O' -c "
+  ALTER TABLE public.bboxes ADD COLUMN wkb_geometry geometry;
+  UPDATE public.bboxes SET wkb_geometry  = ST_GeomFromText(bboxes.geom, 28992);
+"
 ```
 
 
