@@ -146,12 +146,15 @@ ogr2ogr -f "PostgreSQL" PG:"host=145.100.58.83 user=postgres dbname=bboxes passw
 
 ## Working with a Database
 
-### to show column details:
-\d+ public.ec_geometries;
+### to show column details
+```
+\d+ tabl_name;
+```
 
-### show first 10 rows:
-SELECT * FROM public.ec_geometries LIMIT 10;
-
+### show first 10 rows
+```
+SELECT * FROM table_name LIMIT 10;
+```
 
 ## Data
 
