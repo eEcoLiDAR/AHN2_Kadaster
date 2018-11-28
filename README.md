@@ -1,98 +1,139 @@
 # AHN2_Kadaster
-Enrich AHN2 with Kadaster classesd
+Enrich AHN2 with Kadaster classes
 
 
 # PostGIS server
 
+Docker image of PostGIS server can be found on [DockerHub organization of eecolidar](https://hub.docker.com/u/eecolidar/).
+
+One can pull the image by running:
+```
+docker pull eecolidar/postgis
+```
+
 ## Install docker
-Follow instructions to install docker.
+[Follow the instructions](https://docs.docker.com/install/) to install docker.
 
 
-## Create a docker volume
-
+## Change docker volume storage path
+```
 sudo systemctl stop docker
 sudo mkdir /data/local/docker-data
-sudo vim /etc/docker/daemon.json
-<!-- add the lines below -->
+```
+
+Add the lines below to **/etc/docker/daemon.json**:
+```
 {
 	"data-root": "/data/local/docker-data"
 }
-
-<!-- Create a Docker volume in /data/local/postgis-data:
-sudo docker volume create --name postgis-data -o type=btrfs  -o o=bind -->
-
+```
 
 ## Start the server
-docker run -d --name eecolidar-postgis -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -v postgis-data:/var/lib/postgresql fdiblen/eecolidar-postgis
+sudo docker run -d --name eecolidar-postgis -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 docker pull eecolidar/postgis
 
 
 ## Setup the firewall
+If firewall needs to be configured, the command below opens port for PostGIS server on Ubuntu.
+``` 
 sudo ufw allow 5432/tcp
+```
 
+## Connection to the PostGIS server
 
+### Using pgAdmin (Suggested)
 
-## Local Postresql installation
+Install [pgAdmin](https://www.pgadmin.org) and follow the [instructions](https://www.pgadmin.org/docs/pgadmin4/3.x/connect_to_server.html).
 
+### Using psql
+psql -h ServerIP -p 5432 -U postgres
+
+#### Using psql from a Docker image
+You can also use PostreSQL Docker image to connect to the server.
+
+```
 docker pull postgres
-docker run --rm -ti postgres /usr/bin/psql
-
-For get help about psql:
 docker run --rm -ti postgres /usr/bin/psql --help
+```
 
-## Test
-psql -h localhost -p 5432 -U postgres
-
-password is **mysecretpassword**
+#### Example Postresql commands
 
 to list databases:
+```
 \l or \list
+```
 
 to connect to a database:
+```
 \c database_name or \connect database_name
+```
 
 to show tables in database_name:
+```
 \dt+
+```
 
 to query data in a table:
+```
 SELECT * FROM table_name;
+```
+
 or
+
+```
 SELECT column, column2….
 FROM table;
+```
 
 to count rows:
+```
 SELECT COUNT (*)
 FROM table_name;
+```
 
-
-## Check database extensions
-
-\connect mygisdb
+### Check database (PostGIS) extensions
+In order to use PostGIS functionalities, the extensions should be installed. You can check existing extensions for a database with:
+```
+\connect database_name
 \x
 \dx postgis*
+```
 
+## GML data
 
-## GML file info
+### Displaying GML file information
 to show basic info:
+```
 ogrinfo -fields=YES  TOP10NL_01O.gml
+```
+
 
 to show all the layers and features:
+```
 ogrinfo -fields=YES -al TOP10NL_01O.gml
+```
 
-## Download top10NL data
-
-https://www.pdok.nl/downloads?articleid=1976855
-[Direct link](http://geodata.nationaalgeoregister.nl/top10nlv2/extract/kaartbladtotaal/top10nl.zip?formaat=gml)
-
-
-## convert GML to CSV
-
+### Converting GML to CSV
+```
 ogr2ogr -f "CSV" Top10NL_000001.csv Top10NL_000001.gml
+```
 
-
-## import GML file to the server
-
+### Importing GML file to the server
+```
 ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=eecolidar password=mysecretpassword" Top10NL_000001.gml
+```
 
-with a new table
+adding data to a new table
 
+```
 ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=template_postgis password=mysecretpassword" Top10NL_000001.gml -nln newtablename
+```
+
+## Data
+
+### Download top10NL data
+
+[Info page](https://www.pdok.nl/downloads?articleid=1976855)
+
+
+[Direct link](http://geodata.nationaalgeoregister.nl/top10nlv2/extract/kaartbladtotaal/top10nl.zip?formaat=gml) to download.
+
