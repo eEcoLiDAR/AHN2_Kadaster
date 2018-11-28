@@ -29,8 +29,9 @@ Add the lines below to **/etc/docker/daemon.json**:
 ```
 
 ## Start the server
+```
 sudo docker run -d --name eecolidar-postgis -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 docker pull eecolidar/postgis
-
+```
 
 ## Setup the firewall
 If firewall needs to be configured, the command below opens port for PostGIS server on Ubuntu.
@@ -45,7 +46,9 @@ sudo ufw allow 5432/tcp
 Install [pgAdmin](https://www.pgadmin.org) and follow the [instructions](https://www.pgadmin.org/docs/pgadmin4/3.x/connect_to_server.html).
 
 ### Using psql
+```
 psql -h ServerIP -p 5432 -U postgres
+```
 
 #### Using psql from a Docker image
 You can also use PostreSQL Docker image to connect to the server.
@@ -106,7 +109,6 @@ to show basic info:
 ogrinfo -fields=YES  TOP10NL_01O.gml
 ```
 
-
 to show all the layers and features:
 ```
 ogrinfo -fields=YES -al TOP10NL_01O.gml
@@ -128,6 +130,10 @@ adding data to a new table
 ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=template_postgis password=mysecretpassword" Top10NL_000001.gml -nln newtablename
 ```
 
+
+## Database Queries
+
+
 ## Data
 
 ### Download top10NL data
@@ -137,3 +143,20 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=template_postgis
 
 [Direct link](http://geodata.nationaalgeoregister.nl/top10nlv2/extract/kaartbladtotaal/top10nl.zip?formaat=gml) to download.
 
+
+# Resources
+
+## PostGIS
+
+PostGIS Documentation is available here:
+https://postgis.net/documentation/
+
+Section 4 provides data management andf querying documentation, Section 3 provides immediate answers to FAQ
+
+
+## PDAL
+
+PDAL documentation is available here:
+https://pdal.io
+
+PDAL modules and filters can be combined in pipelines using JSON declaration format. PDAL has been used for mergeing of AHN2 data.
