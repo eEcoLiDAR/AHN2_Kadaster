@@ -1,0 +1,37 @@
+{
+    "pipeline":[
+	{
+	    "tag":"ground_laz",
+	    "type":"readers.las",
+	    "filename":"ground_file"
+	},
+	{
+	    "type":"filters.assign",
+	    "assignment":"Classification[:]=2",
+	    "tag":"ground_classed"
+	},
+	{
+	    "tag":"objects_laz",
+	    "type":"readers.las",
+	    "filename":"objects_file"
+	},
+	{
+	    "type":"filters.assign",
+	    "assignment":"Classification[:]=1",
+	    "tag":"objects_classed"
+	},
+	{
+	    "tag":"merging",
+	    "type":"filters.merge",
+	    "inputs":["ground_classed" , "objects_classed"]
+	},
+	{
+	    "tag":"output_merged",
+	    "type":"writers.las",
+	    "filename":"merged_file",
+	    "forward":"all"
+	}
+    ]
+}
+
+	
