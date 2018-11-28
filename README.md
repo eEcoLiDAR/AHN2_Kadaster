@@ -135,8 +135,26 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=template_postgis
 ```
 
 
-## Database Queries
+## Bounding boxes
 
+### importing to PostGIS database
+
+```
+ogr2ogr -f "PostgreSQL" PG:"host=145.100.58.83 user=postgres dbname=bboxes password=mysecretpassword"  bounding_boxes_geom.csv -nln ec_geometries
+```
+
+
+## Working with a Database
+
+### to show column details
+```
+\d+ tabl_name;
+```
+
+### show first 10 rows
+```
+SELECT * FROM table_name LIMIT 10;
+```
 
 ## Data
 
