@@ -144,6 +144,17 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=template_postgis
 [Direct link](http://geodata.nationaalgeoregister.nl/top10nlv2/extract/kaartbladtotaal/top10nl.zip?formaat=gml) to download.
 
 
+# Dependencies/Tools
+
+First create a virtual environment
+```
+python -m venv venv
+source ./venv/bin/activate
+```
+pip install -r requirements.txt
+
+
+
 # Resources
 
 ## PostGIS
