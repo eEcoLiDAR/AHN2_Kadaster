@@ -45,10 +45,10 @@ def get_laz_bbox(path, fname):
 
 
 def csv_header(csv_path, csv_fname):
-    """ csv_header: function to write the header of the CSV (.wkt) file.
+    """ csv_header: function to write the header of the CSV file.
         inputs:
             csv_path: the path (only) to the CSV file
-            csv_fname: the CSV filename (only) with extension (.wkt)
+            csv_fname: the CSV filename (only) with extension
         The fieldnames are hard-coded to be 'name' and 'geom' for the name of the PC tile and geometry.""" 
     
     # generate the full filename    
@@ -69,7 +69,7 @@ def bbox2csv(csv_path, csv_fname, bbox_fname, BBox):
         The function appends rows to a file with already created header.
         inputs:
             csv_path: the path (only) to the CSV file
-            csv_fname: the CSV filename (only) with extension (.wkt)
+            csv_fname: the CSV filename (only) with extenion .csv
             bbox_fname: the LAZ filename (only) with extension (.laz) of the file for  which we calculated the BBox
         The format of the Bounding Box (BBox) is a tuplr:
             minX - the minimum value of the X coordinate of all PC points
@@ -106,7 +106,7 @@ def bbox2csv(csv_path, csv_fname, bbox_fname, BBox):
  
  # main 
 def main():
-    """ Main fucntion for the extract_bbox.py script. It takes LAZ file(s) as input and generated a CSV (.wkt) file containing
+    """ Main fucntion for the extract_bbox.py script. It takes LAZ file(s) as input and generated a CSV file containing
     the bounding box(es) of the file(s). It works in 2 modes- on single PC file or on multiple 
     PC files residing in the same directory. The command line arguments are:
         fname: the signle LAZ filename (only). By default it is supressed.
@@ -117,7 +117,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--fname', help='Single LAZ file name', type=str, default=argparse.SUPPRESS)
     parser.add_argument('-p', '--path', help='LAZ files path', type=str)    
-    parser.add_argument('-csvf', '--csvfname', help='CSV file name', type=str, default='bounding_boxes_geom.wkt')
+    parser.add_argument('-csvf', '--csvfname', help='CSV file name', type=str, default='bounding_boxes_geom.csv')
     parser.add_argument('-csvp', '--csvpath', help='CSV file path', type=str)
     
     # parse the input arguments arguments
