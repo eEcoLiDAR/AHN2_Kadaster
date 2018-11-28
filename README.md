@@ -1,6 +1,10 @@
 # AHN2_Kadaster
 Enrich AHN2 with Kadaster classes
 
+## Workflow
+Schematic of the project workflow
+![Workflow schematic](AHN2_Kadaster_enrichment_workflow.jpg)
+
 
 # PostGIS server
 
