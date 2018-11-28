@@ -6,3 +6,5 @@
 .vim
 .vscode
 .idea
+
+venv
