@@ -9,12 +9,13 @@ Created on Wed Nov 28 17:23:46 2018
 # imports
 import fiona
 from shapely.geometry import Polygon, MultiPolygon, mapping
-from descartes.patch import PolygonPatch
-from matplotlib import pyplot # for plots
+#from descartes.patch import PolygonPatch # for visualization
+#from matplotlib import pyplot # for plots
 from os.path import join
 
 # functions
 # visualization
+'''
 def plot_coords(ax, ob):
     x, y = ob.xy
     ax.plot(x, y, 'o', color='#999999', zorder=1)
@@ -41,6 +42,7 @@ def show_multipolygon(multipolygon, axis, show_coords, extent, color, alpha,
     axis.set_title(title)
 
     return axis
+'''
 
 def save_multipoly_and_classes2shapefile(multipolygon, classes, shapefilename):
     """ Saving the multipolygons and their classes to a shapefile"""
@@ -108,6 +110,7 @@ def main():
     print('Multipolygon is valid?: ', multipoly.is_valid)
     
     # Visualization parameters
+    '''
     ORANGE = '#FF6600'
     al = 0.8
     show_verticies = True
@@ -120,7 +123,7 @@ def main():
     show_multipolygon(multipoly, ax, show_verticies, extent, ORANGE, al, 'multipolygon')
     
     pyplot.show()
-    
+    '''
     classes = [4, 5, 4, 3, 3, 3]
     
     # filename
