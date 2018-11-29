@@ -174,10 +174,10 @@ WHERE ST_Intersects(bboxes.wkb_geometry, waterdeel.wkb_geometry);
 
 To find the intersections for Tile02O specific sub-tile and ogc_fid as sub-tile identifier:
 ```sql
-SELECT bboxes.ogc_fid, bboxes.name, waterdeel.ogc_fid AS waterdeel_ogc_fid, waterdeel.lokaalid AS waterdeel_lokaalid, ST_COLLECT(ST_INTERSECTION(bboxes.wkb_geometry, waterdeel.wkb_geometry)), ST_GeometryType(ST_COLLECT(ST_INTERSECTION(bboxes.wkb_geometry, waterdeel.wkb_geometry)))
+SELECT bboxes.ogc_fid, bboxes.name, waterdeel.ogc_fid AS waterdeel_ogc_fid, waterdeel.lokaalid AS waterdeel_lokaalid, ST_INTERSECTION(bboxes.wkb_geometry, waterdeel.wkb_geometry), ST_GeometryType(ST_INTERSECTION(bboxes.wkb_geometry, waterdeel.wkb_geometry))
 FROM bboxes, waterdeel
 WHERE (ST_GeometryType(waterdeel.wkb_geometry) = 'ST_Polygon' AND ST_Intersects(bboxes.wkb_geometry, waterdeel.wkb_geometry) AND bboxes.ogc_fid = 1)
-GROUP BY bboxes.ogc_fid, waterdeel.ogc_fid  
+GROUP BY bboxes.ogc_fid, waterdeel.ogc_fid
 ```
 
 
