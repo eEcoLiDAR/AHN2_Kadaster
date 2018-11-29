@@ -1,1 +1,3 @@
 pylas
+psycopg2-binary
+simplejson
