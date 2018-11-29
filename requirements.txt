@@ -3,3 +3,6 @@ psycopg2-binary
 simplejson
 pandas
 geopandas
+csv
+fiona
+shapely
