@@ -6,4 +6,16 @@
 .vscode
 .idea
 
+__pycache__
+*/__pycache__
+*/*/__pycache__
+
+*.pyc
+*/*.pyc
+*/*/*.pyc
+
 venv
+
+Intersections/db.config
+
+
