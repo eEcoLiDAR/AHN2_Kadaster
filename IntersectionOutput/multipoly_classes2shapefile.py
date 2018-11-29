@@ -5,16 +5,19 @@ Created on Wed Nov 28 17:23:46 2018
 
 @author: elena
 """
-test = True # true for the artificial test case, for generig purpose, please, make False!
+test = False # true for the artificial test case, for generig purpose, please, make False!
 
 # imports
 import argparse
 import fiona
 from shapely.geometry import Polygon, MultiPolygon, mapping
+from shapely.wkt import loads
 if test:
     from descartes.patch import PolygonPatch # for visualization
     from matplotlib import pyplot # for plots
 from os.path import join, splitext
+import pandas as pd
+
 
 # functions
 # visualization
@@ -107,13 +110,13 @@ def main():
         f = [(2,12), (3,14), (4, 13), (2,12)]
 
         # create test list containing polygons and multipolygons    
-        poly_d = Polygon(d)       
-        multi_abc = MultiPolygon([[a, []], [b, []] ,[c, []]])
-        multi_ef = MultiPolygon([[e, []], [f, []]])
-        multi_poly_list = [multi_abc, poly_d, multi_ef]
+        poly_b = Polygon(b)       
+        multi_ac = MultiPolygon([[a, []] ,[c, []]])
+        multi_def = MultiPolygon([[d, []], [e, []], [f, []]])
+        multi_poly_list = [multi_ac, poly_b, multi_def]
               
-        classes = [4, 5, 4, 3, 3, 3]
-        
+        #classes = [4, 4, 5, 3, 3, 3]
+        orig_classes = [4, 5, 3]
         # filename
         shapefilename = 'simple_example_multipolygon.shp'
         
@@ -125,7 +128,7 @@ def main():
         # argument parser
         parser = argparse.ArgumentParser()
         parser.add_argument('-f', '--fname', help='File name with polygons and their classes', type=str)
-        parser.add_argument('-shpp', '--shapepath', help='Shape file path', type=str)
+        parser.add_argument('-shpp', '--shapepath', help='Shape file path', type=str, default = '.')
         
         # parse the input arguments arguments
         args = parser.parse_args()
@@ -135,20 +138,34 @@ def main():
         shapefilename = base_fname + '.' + 'shp'
         full_shapefilename = join(args.shapepath, shapefilename)
         
-        # TO DO!!! parse the file and extract the list of (multi)polygons and their classes
+        # parse the file and extract the list of (multi)polygons and their classes          
+        data = pd.read_pickle(args.fname)
+        
+        data = data.head(1000)
+        # print(data.head())
         multi_poly_list = []
-        classes = []
+        for d in data['wkt_intersect']:
+            multi_poly_list.append(loads(d))
+        orig_classes = int(data['class_id'])
+        
         
     # create a multipolygon from all (multi)polygons in the input list
     multi = []
+    classes = []
+   # cl_ind = 0
+    or_cl_ind = 0
     for el in multi_poly_list: # for all (potential) multipolygons
+        #print('or_cl_ind: ', or_cl_ind)
         if el.geom_type == 'MultiPolygon':
             for p in el: # for all polygons in each (potential) multipolygon
                 multi.append(p)
-                #TO DO: take care of somehow exanding the classes from inside multipolygons
+                #take care of somehow exanding the classes from inside multipolygons
+                classes.append(orig_classes[or_cl_ind])                
         elif el.geom_type == 'Polygon':
             multi.append(el) # just add a polygon
-    
+            classes.append(orig_classes[or_cl_ind])
+        or_cl_ind = or_cl_ind + 1
+            
     multipoly = MultiPolygon(multi)
     
     print('Multipolygon is valid?: ', multipoly.is_valid)
