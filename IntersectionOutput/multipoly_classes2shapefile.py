@@ -111,7 +111,7 @@ def main():
     ORANGE = '#FF6600'
     al = 0.8
     show_verticies = True
-    extent = [0, 0, 11, 11] # format of extent is [xmin, ymin, xmax, ymax]
+    extent = [0, 0, 11, 16] # format of extent is [xmin, ymin, xmax, ymax]
     
     # Display the multipolygon
     fig = pyplot.figure(1, dpi=90)
