@@ -135,60 +135,73 @@ def main():
         
         # construct the shapefilename from the input filename
         base_fname, ext = splitext(args.fname)
-        shapefilename = base_fname + '.' + 'shp'
-        full_shapefilename = join(args.shapepath, shapefilename)
+#        shapefilename = base_fname + '.' + 'shp'
+#        full_shapefilename = join(args.shapepath, shapefilename)
         
         # parse the file and extract the list of (multi)polygons and their classes          
-        data = pd.read_pickle(args.fname)
+        orig_data = pd.read_pickle(args.fname)
         
-        data = data.head(1000)
-        # print(data.head())
-        multi_poly_list = []
-        for d in data['wkt_intersect']:
-            multi_poly_list.append(loads(d))
-        orig_classes = int(data['class_id'])
-        
-        
-    # create a multipolygon from all (multi)polygons in the input list
-    multi = []
-    classes = []
-   # cl_ind = 0
-    or_cl_ind = 0
-    for el in multi_poly_list: # for all (potential) multipolygons
-        #print('or_cl_ind: ', or_cl_ind)
-        if el.geom_type == 'MultiPolygon':
-            for p in el: # for all polygons in each (potential) multipolygon
-                multi.append(p)
-                #take care of somehow exanding the classes from inside multipolygons
-                classes.append(orig_classes[or_cl_ind])                
-        elif el.geom_type == 'Polygon':
-            multi.append(el) # just add a polygon
-            classes.append(orig_classes[or_cl_ind])
-        or_cl_ind = or_cl_ind + 1
+
+        for class_id in orig_data['class_id'].unique():
+            data = orig_data[orig_data['class_id'] == class_id]
+           # print(data.head())
+           
+            shapefilename = base_fname + '__' + str(data['class'][1]) + '.' + 'shp'
+            full_shapefilename = join(args.shapepath, shapefilename)
+           
+           # data = data.head(1000)
             
-    multipoly = MultiPolygon(multi)
-    
-    print('Multipolygon is valid?: ', multipoly.is_valid)
-    
-    if test:
-        # Visualization        
-        ORANGE = '#FF6600'
-        al = 0.8
-        show_verticies = True
-        extent = [0, 0, 11, 16] # format of extent is [xmin, ymin, xmax, ymax]
+            # get the necessary columns- geometries and their classes
+            multi_poly_list = []
+            for d in data['wkt_intersect']:
+                multi_poly_list.append(loads(d))
+            orig_classes = []
+            for c in data['class_id']:
+                ci = int(c)
+                orig_classes.append(ci)
         
-        # Display the multipolygon
-        fig = pyplot.figure(1, dpi=90)
-        ax = fig.add_subplot(111)
         
-        show_multipolygon(multipoly, ax, show_verticies, extent, ORANGE, al, 'multipolygon')
         
-        pyplot.show()
-    
-    # saving to shape file (!)
-    save_multipoly_and_classes2shapefile(multipoly, classes, full_shapefilename)
-    
-    print("Please, check with a GIS weather this file contains a valid polygon! \n", full_shapefilename)
+            # create a multipolygon from all (multi)polygons in the input list
+            multi = []
+            classes = []
+        
+            or_cl_ind = 0
+            for el in multi_poly_list: # for all (potential) multipolygons
+                #print('or_cl_ind: ', or_cl_ind)
+                if el.geom_type == 'MultiPolygon':
+                    for p in el: # for all polygons in each (potential) multipolygon
+                        multi.append(p)
+                        #take care of somehow exanding the classes from inside multipolygons
+                        classes.append(orig_classes[or_cl_ind])                
+                elif el.geom_type == 'Polygon':
+                    multi.append(el) # just add a polygon
+                    classes.append(orig_classes[or_cl_ind])
+                or_cl_ind = or_cl_ind + 1
+                    
+            multipoly = MultiPolygon(multi)
+            
+            print('Multipolygon is valid?: ', multipoly.is_valid)
+            
+            if test:
+                # Visualization        
+                ORANGE = '#FF6600'
+                al = 0.8
+                show_verticies = True
+                extent = [0, 0, 11, 16] # format of extent is [xmin, ymin, xmax, ymax]
+                
+                # Display the multipolygon
+                fig = pyplot.figure(1, dpi=90)
+                ax = fig.add_subplot(111)
+                
+                show_multipolygon(multipoly, ax, show_verticies, extent, ORANGE, al, 'multipolygon')
+                
+                pyplot.show()
+            
+            # saving to shape file (!)
+            save_multipoly_and_classes2shapefile(multipoly, classes, full_shapefilename)
+            
+            print("Please, check with a GIS weather this file contains a valid polygon! \n", full_shapefilename)
 
 if __name__ == '__main__':
     main()        
