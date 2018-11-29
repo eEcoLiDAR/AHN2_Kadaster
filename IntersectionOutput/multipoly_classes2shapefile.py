@@ -20,11 +20,26 @@ from os.path import join, splitext
 # visualization
 if test:
     def plot_coords(ax, ob):
+        """ plot_coords - plots a point (as circle) with the given coordinates
+            inputs:
+                ax - plot axes
+                ob - coordinates with fields x and y
+        """
         x, y = ob.xy
         ax.plot(x, y, 'o', color='#999999', zorder=1)
                 
     def show_multipolygon(multipolygon, axis, show_coords, extent, color, alpha,
                           title):
+        """ show_multipolygon - displayes a multipolygon with specified visualizaiton parameters
+            inputs:
+                multipolygon - the shapely multipolygon to display
+                axis - the figure axis
+                show_coords - Boolean wheerhter to show the multipolygon verticies or not
+                extent - the extent of the figure canvas
+                color - the color to display in
+                alpha - the alpha
+                title - title of the figure
+        """
     
         for polygon in multipolygon:
             if show_coords:
@@ -48,9 +63,12 @@ if test:
 
 
 def save_multipoly_and_classes2shapefile(multipolygon, classes, shapefilename):
-    """ Saving the multipolygons and their classes to a shapefile"""
+    """ save_mutlipoly_and classes2shapefile - saving the multipolygon and the containing polygon's classes to a shapefile
+        inputs:
+            multipolygon- the shapely multipolygon to save
+            classes- list of the classes of each of the polygon (take care for the ones within a multipolygon!)
+            shapefilename - the shape filename to store the multipolygon and all classes"""
     # define the shapefile schema
-    # define the schema
     schema = {
         'geometry': 'Polygon',
         'properties': {
@@ -58,7 +76,7 @@ def save_multipoly_and_classes2shapefile(multipolygon, classes, shapefilename):
         },
     }
 
-    # write to a shapefile
+    # write to a shapefile with the Amersfoort CRS
     with fiona.open(shapefilename, 'w', 'ESRI Shapefile', schema, crs={'init': "epsg:28992"}) as file:
         for i, poly in enumerate(multipolygon, start=0):
             file.write({
@@ -73,7 +91,12 @@ def save_multipoly_and_classes2shapefile(multipolygon, classes, shapefilename):
 
 # Main
 def main():
-       
+    """ main- script to load set of (multi)polygons and their respective kadaster classes and save it to a shape file.
+        The script has a test and generic mode. In test mode- 6 simple generated shapes illustrate how the script works.
+        argumets:
+            fname - input filename containing list of (multi)polygons and their kadaster classes
+            shapepath - the path of the output shapefile
+    """
     if test: # test case
         # Define planar shapes by thier verticies
         a = [(2,6), (4,6), (4,9), (2,9), (2,6)]
@@ -112,7 +135,7 @@ def main():
         shapefilename = base_fname + '.' + 'shp'
         full_shapefilename = join(args.shapepath, shapefilename)
         
-        # parse the file and extract the list of (multi)polygons and their classes
+        # TO DO!!! parse the file and extract the list of (multi)polygons and their classes
         multi_poly_list = []
         classes = []
         
@@ -122,6 +145,7 @@ def main():
         if el.geom_type == 'MultiPolygon':
             for p in el: # for all polygons in each (potential) multipolygon
                 multi.append(p)
+                #TO DO: take care of somehow exanding the classes from inside multipolygons
         elif el.geom_type == 'Polygon':
             multi.append(el) # just add a polygon
     
