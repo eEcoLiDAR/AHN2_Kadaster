@@ -1,3 +1,5 @@
 pylas
 psycopg2-binary
 simplejson
+pandas
+geopandas

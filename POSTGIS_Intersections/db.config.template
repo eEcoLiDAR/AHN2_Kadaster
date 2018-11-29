@@ -1,0 +1,5 @@
+[postgis]
+host=localhost
+database=bboxes
+user=postgres
+password=postgres
