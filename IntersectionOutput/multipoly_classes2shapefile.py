@@ -54,7 +54,7 @@ def save_multipoly_and_classes2shapefile(multipolygon, classes, shapefilename):
     }
 
     # write to a shapefile
-    with fiona.open(shapefilename, 'w', 'ESRI Shapefile', schema) as file:
+    with fiona.open(shapefilename, 'w', 'ESRI Shapefile', schema, crs={'init': "epsg:28992"}) as file:
         for i, poly in enumerate(multipolygon, start=0):
             file.write({
                 'geometry': mapping(poly),
