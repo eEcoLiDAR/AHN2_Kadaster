@@ -150,6 +150,21 @@ psql -h localhost -U postgres --dbname='Tile02O' -c "
 "
 ```
 
+## Class names in TOP10NL
+
+1: Gebouw
+2: Inrichtingselement
+3: Terrein (Polygon)
+4: Waterdeel
+5: GeografischGebied (Point)
+6: FunctioneelGebied
+7: Plaats
+8: RegistratiefGebied
+9: Hoogte
+10: Relief (Line String)
+11: Wegdeel
+
+
 
 ## Working with a Database
 

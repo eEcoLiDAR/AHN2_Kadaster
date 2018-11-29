@@ -2,6 +2,12 @@
 *.gfs
 *.sql
 
+*.pkl
+*.npy
+
+*/*.pkl
+*/*.npy
+
 .vim
 .vscode
 .idea
@@ -10,12 +16,16 @@ __pycache__
 */__pycache__
 */*/__pycache__
 
+.ipynb_checkpoints
+*/.ipynb_checkpoints
+
 *.pyc
 */*.pyc
 */*/*.pyc
 
 venv
 
+db.config
 Intersections/db.config
 
 
