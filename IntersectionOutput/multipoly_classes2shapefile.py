@@ -5,45 +5,47 @@ Created on Wed Nov 28 17:23:46 2018
 
 @author: elena
 """
+test = True # true for the artificial test case, for generig purpose, please, make False!
 
 # imports
 import argparse
 import fiona
 from shapely.geometry import Polygon, MultiPolygon, mapping
-#from descartes.patch import PolygonPatch # for visualization
-#from matplotlib import pyplot # for plots
+if test:
+    from descartes.patch import PolygonPatch # for visualization
+    from matplotlib import pyplot # for plots
 from os.path import join, splitext
 
 # functions
 # visualization
-'''
-def plot_coords(ax, ob):
-    x, y = ob.xy
-    ax.plot(x, y, 'o', color='#999999', zorder=1)
-            
-def show_multipolygon(multipolygon, axis, show_coords, extent, color, alpha,
-                      title):
+if test:
+    def plot_coords(ax, ob):
+        x, y = ob.xy
+        ax.plot(x, y, 'o', color='#999999', zorder=1)
+                
+    def show_multipolygon(multipolygon, axis, show_coords, extent, color, alpha,
+                          title):
+    
+        for polygon in multipolygon:
+            if show_coords:
+                plot_coords(axis, polygon.exterior)
+            patch = PolygonPatch(
+                polygon, facecolor=color, edgecolor=color, alpha=alpha, zorder=2)
+            axis.add_patch(patch)
+    
+        xmin, ymin, xmax, ymax = extent
+        xrange = [xmin, xmax]
+        yrange = [ymin, ymax]
+        axis.set_xlim(*xrange)
+        # axis.set_xticks(range(*xrange))
+        axis.set_ylim(*yrange)
+        # axis.set_yticks(range(*yrange))
+        axis.set_aspect(1)
+    
+        axis.set_title(title)
+    
+        return axis
 
-    for polygon in multipolygon:
-        if show_coords:
-            plot_coords(axis, polygon.exterior)
-        patch = PolygonPatch(
-            polygon, facecolor=color, edgecolor=color, alpha=alpha, zorder=2)
-        axis.add_patch(patch)
-
-    xmin, ymin, xmax, ymax = extent
-    xrange = [xmin, xmax]
-    yrange = [ymin, ymax]
-    axis.set_xlim(*xrange)
-    # axis.set_xticks(range(*xrange))
-    axis.set_ylim(*yrange)
-    # axis.set_yticks(range(*yrange))
-    axis.set_aspect(1)
-
-    axis.set_title(title)
-
-    return axis
-'''
 
 def save_multipoly_and_classes2shapefile(multipolygon, classes, shapefilename):
     """ Saving the multipolygons and their classes to a shapefile"""
@@ -71,9 +73,7 @@ def save_multipoly_and_classes2shapefile(multipolygon, classes, shapefilename):
 
 # Main
 def main():
-    test = True # true for the artificial test case, for generig purpose, please, make False!
-    
-      
+       
     if test: # test case
         # Define planar shapes by thier verticies
         a = [(2,6), (4,6), (4,9), (2,9), (2,6)]
@@ -89,21 +89,6 @@ def main():
         multi_ef = MultiPolygon([[e, []], [f, []]])
         multi_poly_list = [multi_abc, poly_d, multi_ef]
               
-        # Visualization parameters
-        '''
-        ORANGE = '#FF6600'
-        al = 0.8
-        show_verticies = True
-        extent = [0, 0, 11, 16] # format of extent is [xmin, ymin, xmax, ymax]
-        
-        # Display the multipolygon
-        fig = pyplot.figure(1, dpi=90)
-        ax = fig.add_subplot(111)
-        
-        show_multipolygon(multipoly, ax, show_verticies, extent, ORANGE, al, 'multipolygon')
-        
-        pyplot.show()
-        '''
         classes = [4, 5, 4, 3, 3, 3]
         
         # filename
@@ -143,6 +128,22 @@ def main():
     multipoly = MultiPolygon(multi)
     
     print('Multipolygon is valid?: ', multipoly.is_valid)
+    
+    if test:
+        # Visualization        
+        ORANGE = '#FF6600'
+        al = 0.8
+        show_verticies = True
+        extent = [0, 0, 11, 16] # format of extent is [xmin, ymin, xmax, ymax]
+        
+        # Display the multipolygon
+        fig = pyplot.figure(1, dpi=90)
+        ax = fig.add_subplot(111)
+        
+        show_multipolygon(multipoly, ax, show_verticies, extent, ORANGE, al, 'multipolygon')
+        
+        pyplot.show()
+    
     # saving to shape file (!)
     save_multipoly_and_classes2shapefile(multipoly, classes, full_shapefilename)
     
